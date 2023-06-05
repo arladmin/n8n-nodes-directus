@@ -304,9 +304,7 @@ export class Directus implements INodeType {
 						"GET",
 						"collections",
 					);
-					console.log("1. collections :");
 					for (const collection of collections.data) {
-						console.log(collection.collection);
 						const name = collection.collection;
 						const nameInCapital = name.charAt(0).toUpperCase() + name.slice(1);
 						returnData.push({
@@ -332,9 +330,7 @@ export class Directus implements INodeType {
 						"GET",
 						"collections",
 					);
-					console.log("1. collections :");
 					for (const collection of collections.data) {
-						console.log(collection.collection);
 						const name = collection.collection;
 						const nameInCapital = name.charAt(0).toUpperCase() + name.slice(1);
 						const isSystem = (collection.meta?.system ?? false) as boolean;
@@ -794,7 +790,6 @@ export class Directus implements INodeType {
 						endpoint = `assets`;
 
 						let response;
-            console.log({ID});
 						//if (ID) endpoint += `/${ID}`;
 
 						if (parametersAreJson) {
@@ -821,8 +816,6 @@ export class Directus implements INodeType {
 								}
 							}
 						}
-            console.log({ID});
-            console.log("Getting asset");
 						response = await directusApiAssetRequest.call(
 							this,
 							requestMethod,
@@ -1083,7 +1076,6 @@ export class Directus implements INodeType {
 							body,
 							qs,
 						);
-						console.log(response);
 
 						if (typeof response != "object") {
 							responseData = { response };
@@ -1518,25 +1510,14 @@ export class Directus implements INodeType {
 
 						//////////////////////////////////
 						const timerLabel = `${resource} | ${operation}`;
-						console.log("Start");
-						console.time(timerLabel);
 						////////////////////////////////////
 						if (splitIntoItems === true && Array.isArray(responseData)) {
 							responseData.forEach((item, index) => {
 								returnItems.push({ json: item });
-								console.log("1.");
-								console.log(index);
-								console.timeLog(timerLabel);
-							});
-							console.log("2.");
-							console.timeLog(timerLabel);
+							});					
 						} else {
 							returnItems.push({ json: responseData });
-							console.log("3.");
-							console.timeLog(timerLabel);
 						}
-						console.log("End");
-						console.timeEnd(timerLabel);
 					} catch (error) {
 						if (this.continueOnFail()) {
 							returnItems.push({ json: { error: error.message } });
@@ -1568,7 +1549,6 @@ export class Directus implements INodeType {
 						//////////////////////////////////
 						const timerLabel = `${resource} | ${operation}`;
 
-						console.time(timerLabel);
 						////////////////////////////////////
 						if (splitIntoItems === true && Array.isArray(responseData)) {
 							responseData.forEach((item, index) => {
@@ -3803,8 +3783,6 @@ export class Directus implements INodeType {
 
 						//////////////////////////////////
 						const timerLabel = `${resource} | ${operation}`;
-						console.log("Start");
-						console.time(timerLabel);
 						////////////////////////////////////
 						if (splitIntoItems === true && Array.isArray(responseData)) {
 							responseData.forEach((item, index) => {
@@ -5504,7 +5482,6 @@ export class Directus implements INodeType {
 							body,
 							qs,
 						);
-						console.log({ response });
 
 						if (typeof response != "object") {
 							responseData = { response };
@@ -5590,8 +5567,6 @@ export class Directus implements INodeType {
 							body,
 							qs,
 						);
-						console.log(typeof response);
-						console.log(response);
 
 						if (typeof response != "object") {
 							responseData = { response };
@@ -5925,7 +5900,6 @@ export class Directus implements INodeType {
 							const collections = this.getNodeParameter("collections", i) as
 								| object
 								| string;
-							console.log({ name, url, actions, collections });
 
 							if (typeof actions == "string") {
 								body["actions"] = JSON.parse(actions);

@@ -40,7 +40,6 @@ export async function directusApiRequest(
 				accessToken: string;
 		};
 
-		console.log('2. credentials : ', { credentials });
 		if (credentials === undefined) {
 				throw new Error('No credentials got returned!');
 		}
@@ -63,10 +62,8 @@ export async function directusApiRequest(
 
 		try {
 				options.headers!['Authorization'] = accessToken ? `Bearer ${accessToken}` : "";
-				console.log('3. options : ', { options });
 				//const res = await this.helpers.request!(options);
 				const res = await this.helpers.httpRequestWithAuthentication.call(this, 'directusApi', options);
-				//console.log({res});
 				return res;
 		} catch (error) {
 				//throw new NodeApiError(this.getNode(), error);
@@ -108,7 +105,6 @@ export async function directusApiAssetRequest(
 		const url = params.url!.replace(/\/$/, '') || null;
 		const accessToken = params.accessToken! || null;
 
-        //console.log({url,path,ID});
 
 		const optionsFile: IHttpRequestOptions = {
 				headers: {
@@ -121,7 +117,6 @@ export async function directusApiAssetRequest(
 				url: `${url}/files/${ID}`,
 				json: true,
 		};
-		console.log('3. optionsFile : ', { optionsFile });
 
 		const optionsAsset: IHttpRequestOptions = {
 				headers: {
@@ -135,7 +130,6 @@ export async function directusApiAssetRequest(
 				json: true,
 				encoding: "arraybuffer"
 		};
-		console.log('4. optionsAsset : ', { optionsAsset });
 
 		try {
 				//const resFile = await this.helpers.request!(optionsFile);                
@@ -146,7 +140,6 @@ export async function directusApiAssetRequest(
 				const res = await this.helpers.httpRequestWithAuthentication.call(this, 'directusApi', optionsAsset);
 				const binaryData = Buffer.from(res);
 
-				//console.log(file);
 				const binary: IBinaryKeyData = {};
 				binary![dataPropertyName] = await this.helpers.prepareBinaryData(
 						binaryData,
@@ -176,9 +169,7 @@ export async function directusApiFileRequest(
 		uri?: string,
 		option: IDataObject = {},
 ): Promise<any> {
-		// tslint:disable-line:no-any
-        console.log("Received file for processing");
-        //console.log({method,path,formData,body,qs});
+		// tslint:disable-line:no-any        
 
 		const credentials = (await this.getCredentials('directusApi')) as {
 				url: string;
@@ -204,19 +195,16 @@ export async function directusApiFileRequest(
 				body: formData,
 				url: `${url}/${path}`,
 		};
-        //console.log({optionsFormData});
 		const responseFile = {};
 
 		try {
 				if (method == 'POST') {
 						// 1. Create a file with content
 
-                        console.log("Uploading raw file");
 						const response = await this.helpers.request!(optionsFormData);
                         //const response = await this.helpers.httpRequestWithAuthentication.call(this, 'directusApi', optionsFormData);
 						const file = JSON.parse(response).data;
 
-                        console.log("Raw file uploaded");
 
 						// 2. Update the file object with fileObject properties
 						const res = await directusApiRequest.call(
@@ -225,8 +213,6 @@ export async function directusApiFileRequest(
 								`files/${file.id}`,
 								body,
 						);
-                        console.log("File data updated");
-                        //console.log({res});
 						Object.assign(responseFile, res);
 				}
 				if (method == 'PATCH') {
